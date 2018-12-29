@@ -1,5 +1,7 @@
 const express = require('express');
-const stripe = require('stripe')(process.env.SECRET_KEY);
+const keys = require('./config/keys');
+// const result = require('dotenv').config({ path: './.env' });
+const stripe = require('stripe')(keys.secretKey);
 const bodyParser = require('body-parser');
 const exphbs = require('express-handlebars');
 
@@ -18,7 +20,31 @@ app.use(express.static(`${__dirname}/public`));
 
 // Index Route
 app.get('/', (req, res) => {
-  res.render('index');
+  res.render('index', {
+    publicKey: keys.publicKey
+  });
+});
+
+// Charge Route
+app.post('/charge', (req, res) => {
+  const amount = 2500;
+  //
+  // console.log(req.body);
+  // res.send('Success!');
+
+  stripe.customers.create({
+     email: req.body.stripeEmail,
+    source: req.body.stripeToken
+  })
+  .then(customer =>
+    stripe.charges.create({
+      amount,
+      description: "Sample Charge",
+         currency: "usd",
+         customer: customer.id
+    }))
+  .then(charge => res.render("success"))
+  .catch(err => console.log(err));
 });
 
 const PORT = process.env.PORT || 5000;

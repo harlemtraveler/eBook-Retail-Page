@@ -5,6 +5,22 @@
         Cybersecurity eBook
       </h1>
       <p class="lead">Learn cybersecurity the dangerous way</p>
+      <form action="/charge" method="POST">
+        <script
+          src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+          data-key={{ publicKey }}
+          data-amount="2500"
+          data-name="Cybersecurity eBook"
+          data-description="US Cyber Warfare Operations"
+          data-image="https://stripe.com/img/documentation/checkout/marketplace.png"
+          data-locale="auto">
+        </script>
+        <script>
+          // Hide default stripe button
+          document.getElementsByClassName('stripe-button-el')[0].style.display = 'none';
+        </script>
+        <button type="submit" class="btn btn-outline-dark text-white btn-lg">Purchase for $25</button>
+      </form>
     </div>
     <div class="col-md-6">
       <img src="/img/CyberwarOps-cover-image.png" alt="ebook image" class="img-fluid">
